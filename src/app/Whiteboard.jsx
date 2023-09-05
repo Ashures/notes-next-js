@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import NoteList from "./NoteList"
 
 export default function Whiteboard() {
@@ -11,9 +11,9 @@ export default function Whiteboard() {
             return JSON.parse(items);
         }
     });
+    const [currentPage, setCurrentPage] = useState(0);
 
     useEffect(() => {
-        console.log('notes updated.')
         localStorage.setItem("NOTES", JSON.stringify(notes));
     }, [notes]);
 
@@ -31,14 +31,14 @@ export default function Whiteboard() {
     }
 
     function updateNote(newNote) {
-        const newNotes = notes.map((n) => {
+        const notesList = notes.map((n) => {
             if (n.id === newNote.id) {
                 return newNote;
             }
             return n;
         });
 
-        setNotes(newNotes);
+        setNotes(notesList);
     }
 
     function removeNote(id) {
@@ -47,15 +47,22 @@ export default function Whiteboard() {
         })
     }
 
+    function changePage(offset) {
+        if ((currentPage + offset) * 4 >= 0 && (currentPage + offset) * 4 < notes.length + 4) {
+            setCurrentPage((page) => page + offset);
+        } 
+    }
+
     return (
         <div className="white-board">
-            <NoteList notes={notes} updateNote={updateNote} removeNote={removeNote} />
-            <div className="add-note note-shadow">
-                <button onClick={addNote} className="custom-btn" id="add-note-btn">+</button>
-            </div>
-            <div className="change-page">
-                <button className="custom-btn" id="page-left">{"<"}</button>
-                <button className="custom-btn" id="page-right">{">"}</button>
+            <NoteList notes={notes} addNote={addNote} currentPage={currentPage} updateNote={updateNote} removeNote={removeNote} />
+            <div className="notes-buttons note-shadow">
+                
+                <div className="change-page">
+                    <button onClick={() => changePage(-1)} className="custom-btn" id="page-left">{"<"}</button>
+                    <div id="note-page-count">{currentPage + 1}</div>
+                    <button onClick={() => changePage(1)} className="custom-btn" id="page-right">{">"}</button>
+                </div>
             </div>
         </div>
     );
