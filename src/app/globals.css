@@ -59,7 +59,7 @@ body {
     flex-direction: column;
     align-items: center;
     position: relative;
-    background-color: rgb(255, 236, 130);
+    background: linear-gradient(to top, #fdf68d, #ffec82 60%,  #dfbd5f 90%);
     padding: 30px;
     transition: 50ms;
 }
