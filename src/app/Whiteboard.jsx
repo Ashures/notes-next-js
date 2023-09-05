@@ -23,8 +23,8 @@ export default function Whiteboard() {
                 ...currentNotes,
                 {
                     id: crypto.randomUUID(),
-                    title: 'test title',
-                    text: 'test text'
+                    title: '',
+                    text: ''
                 }
             ];
         })
